@@ -8,6 +8,7 @@ import participantsData from '@/data/participants.json';
 
 const participants = participantsData.participants as Array<{ name: string; class: string; number?: string | null }>;
 const total = participants.length;
+const pending = (participantsData as any).pending ?? 0;
 
 const counts: Record<string, number> = Object.fromEntries(CLASSES.map(c => [c.id, 0]));
 for (const p of participants) {
@@ -65,7 +66,10 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <div class="class-card bg-gradient-to-br from-racing-redDk to-asphalt-700 border-racing-red/40">
         <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Всего на старте</div>
         <div class="font-display text-7xl text-white number-glow mt-2">{total.toString().padStart(3, '0')}</div>
-        <p class="text-sm text-asphalt-200 mt-2">зарегистрированных райдеров</p>
+        <p class="text-sm text-asphalt-200 mt-2">подтверждённых райдеров</p>
+        {pending > 0 && (
+          <p class="text-xs text-racing-yellow mt-1">+ {pending} на проверке</p>
+        )}
         <p class="text-[10px] text-asphalt-300 mt-3 font-mono">upd: {new Date(updated).toLocaleString('ru-RU')}</p>
       </div>
     </div>

@@ -23,8 +23,8 @@ OUT  = ROOT / "src" / "data" / "participants.json"
 
 SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1KcB8loBBpQaionRSkIJrcsLIsMiYHIUpFDm9jKWIMOw")
 WORKSHEET_NAME = os.environ.get("WORKSHEET_NAME", "Лист1")
-# Публикуем только валидные записи. "Отклонено" / мусор — пропускаем.
-ALLOWED_STATUSES = {"подтверждено", "на проверке", ""}  # пусто = только появилась
+# Публично — только подтверждённые записи.
+ALLOWED_STATUSES = {"подтверждено"}
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # синонимы колонок (любые из этих имён подойдут)
@@ -95,6 +95,7 @@ def main():
 
     rows = ws.get_all_records()  # list[dict]
     participants = []
+    pending = 0  # на проверке — счётчик без ФИО
     for r in rows:
         name  = pick(r, NAME_KEYS)
         klass = pick(r, CLASS_KEYS)
@@ -105,7 +106,10 @@ def main():
         if len(parts) < 2:
             continue
         status = (pick(r, {"статус", "status"}) or "").lower()
-        if status and status not in ALLOWED_STATUSES:
+        if status == "на проверке":
+            pending += 1
+            continue
+        if status not in ALLOWED_STATUSES:
             continue
         num  = pick(r, NUMBER_KEYS)
         date = pick(r, DATE_KEYS)
@@ -121,6 +125,7 @@ def main():
         "updatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source": f"gsheet:{SPREADSHEET_ID[:8]}…/{ws.title}",
         "total": len(participants),
+        "pending": pending,
         "participants": participants,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)

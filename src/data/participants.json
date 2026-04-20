@@ -1,70 +1,7 @@
 {
-  "updatedAt": "2026-04-20T08:13:48Z",
-  "source": "gsheet:1KcB8loB…/Лист1",
-  "total": 9,
-  "participants": [
-    {
-      "name": "выаы йф авы",
-      "class": "Любитель",
-      "number": null,
-      "status": "на проверке",
-      "registeredAt": "2025-09-09 8:33:53"
-    },
-    {
-      "name": "Иванисов Николай Николаевич",
-      "class": "Любитель",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-09 8:45:24"
-    },
-    {
-      "name": "Малакуцкий Александр Александрович",
-      "class": "Мастер(45+)",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-14 17:33:35"
-    },
-    {
-      "name": "Тимченко Андрей Сергеевич",
-      "class": "Любитель",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-15 18:37:02"
-    },
-    {
-      "name": "Меркулов Дмитрий Валерьевич",
-      "class": "Открытый",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-15 22:53:27"
-    },
-    {
-      "name": "Сумятин Александр Александрович",
-      "class": "Дети",
-      "number": null,
-      "status": "на проверке",
-      "registeredAt": "2025-09-16 19:14:55"
-    },
-    {
-      "name": "Бедило Тимур Евгеньевич",
-      "class": "Дети",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-16 19:53:11"
-    },
-    {
-      "name": "Пшеничный Денис Николаевич",
-      "class": "Любитель",
-      "number": null,
-      "status": "подтверждено",
-      "registeredAt": "2025-09-17 18:54:18"
-    },
-    {
-      "name": "gfdg dsfgdsfgfd",
-      "class": "Любитель",
-      "number": null,
-      "status": "на проверке",
-      "registeredAt": "2025-09-17 21:36:33"
-    }
-  ]
+  "updatedAt": "2026-04-20T00:00:00Z",
+  "source": "seed",
+  "total": 0,
+  "pending": 0,
+  "participants": []
 }
