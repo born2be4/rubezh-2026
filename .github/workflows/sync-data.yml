@@ -7,14 +7,19 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: sync-data
   cancel-in-progress: false
 
 jobs:
-  sync:
+  sync-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -24,7 +29,7 @@ jobs:
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
 
-      - name: Install deps
+      - name: Install python deps
         run: pip install -r scripts/requirements.txt
 
       - name: Sync from Google Sheet
@@ -48,3 +53,22 @@ jobs:
             git commit -m "chore: sync participants ($(date -u +%FT%TZ))"
             git push
           fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install node deps
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
