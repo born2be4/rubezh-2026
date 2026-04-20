@@ -65,7 +65,12 @@ export function classById(id: string): RaceClass | undefined {
 
 export function classByName(name: string): RaceClass | undefined {
   const n = name.trim().toLowerCase();
-  return CLASSES.find(c => c.name.toLowerCase() === n || n.includes(c.name.toLowerCase()));
+  if (n.includes('дет') || n.includes('kid')) return CLASSES.find(c => c.id === 'kids');
+  if (n.includes('лед') || n.includes('lad') || n.includes('woman')) return CLASSES.find(c => c.id === 'ladies');
+  if (n.includes('мастер') || n.includes('45') || n.includes('master') || n.includes('вет')) return CLASSES.find(c => c.id === 'master');
+  if (n.includes('любител') || n.includes('amateur')) return CLASSES.find(c => c.id === 'amateur');
+  if (n.includes('открыт') || n.includes('open')) return CLASSES.find(c => c.id === 'open');
+  return CLASSES.find(c => c.name.toLowerCase() === n);
 }
 
 export const SCHEDULE = [

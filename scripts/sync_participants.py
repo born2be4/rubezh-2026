@@ -22,7 +22,9 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT  = ROOT / "src" / "data" / "participants.json"
 
 SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1KcB8loBBpQaionRSkIJrcsLIsMiYHIUpFDm9jKWIMOw")
-WORKSHEET_NAME = os.environ.get("WORKSHEET_NAME", "Новый Рубеж 2.0 — Бердянск")
+WORKSHEET_NAME = os.environ.get("WORKSHEET_NAME", "Лист1")
+# Публикуем только валидные записи. "Отклонено" / мусор — пропускаем.
+ALLOWED_STATUSES = {"подтверждено", "на проверке", ""}  # пусто = только появилась
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
 # синонимы колонок (любые из этих имён подойдут)
@@ -98,12 +100,20 @@ def main():
         klass = pick(r, CLASS_KEYS)
         if not name or not klass:
             continue
-        num   = pick(r, NUMBER_KEYS)
-        date  = pick(r, DATE_KEYS)
+        # фильтр: валидное ФИО (минимум 2 слова по 2+ символа)
+        parts = [p for p in re.split(r"\s+", name) if len(p) >= 2]
+        if len(parts) < 2:
+            continue
+        status = (pick(r, {"статус", "status"}) or "").lower()
+        if status and status not in ALLOWED_STATUSES:
+            continue
+        num  = pick(r, NUMBER_KEYS)
+        date = pick(r, DATE_KEYS)
         participants.append({
             "name": name,
             "class": klass,
             "number": num,
+            "status": status or None,
             "registeredAt": date,
         })
 
