@@ -1,0 +1,59 @@
+---
+// Силуэт мотокроссмена в прыжке. SVG-вектор, масштабируется.
+---
+<svg class="rider-silhouette" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+  <!-- Земля/пыль -->
+  <ellipse cx="400" cy="560" rx="360" ry="18" fill="currentColor" opacity="0.5"/>
+
+  <!-- Заднее колесо -->
+  <circle cx="230" cy="440" r="95" fill="none" stroke="currentColor" stroke-width="18"/>
+  <circle cx="230" cy="440" r="30" fill="currentColor"/>
+  <g stroke="currentColor" stroke-width="6">
+    <line x1="230" y1="350" x2="230" y2="530"/>
+    <line x1="140" y1="440" x2="320" y2="440"/>
+    <line x1="170" y1="380" x2="290" y2="500"/>
+    <line x1="290" y1="380" x2="170" y2="500"/>
+  </g>
+
+  <!-- Переднее колесо (в воздухе, выше) -->
+  <circle cx="600" cy="360" r="95" fill="none" stroke="currentColor" stroke-width="18"/>
+  <circle cx="600" cy="360" r="30" fill="currentColor"/>
+  <g stroke="currentColor" stroke-width="6">
+    <line x1="600" y1="270" x2="600" y2="450"/>
+    <line x1="510" y1="360" x2="690" y2="360"/>
+    <line x1="540" y1="300" x2="660" y2="420"/>
+    <line x1="660" y1="300" x2="540" y2="420"/>
+  </g>
+
+  <!-- Рама / двигатель -->
+  <polygon points="230,440 350,340 450,330 500,360 600,360 540,420 420,420" fill="currentColor"/>
+  <polygon points="350,320 420,250 500,260 490,330" fill="currentColor"/>
+
+  <!-- Вилка переднего колеса -->
+  <polygon points="500,290 520,280 600,360 580,370" fill="currentColor"/>
+
+  <!-- Руль -->
+  <polygon points="470,230 540,200 560,215 490,250" fill="currentColor"/>
+
+  <!-- Тело райдера -->
+  <path d="M 400 280 Q 420 200 460 180 L 500 210 Q 470 240 450 280 Z" fill="currentColor"/>
+  <!-- Шлем -->
+  <path d="M 440 170 Q 445 135 485 130 Q 520 135 520 175 Q 520 195 500 210 L 470 215 Q 450 205 440 190 Z" fill="currentColor"/>
+  <!-- Визор -->
+  <rect x="455" y="148" width="55" height="18" rx="5" fill="currentColor" opacity="0.6"/>
+
+  <!-- Ноги -->
+  <path d="M 380 350 Q 400 400 440 420 L 470 400 Q 430 360 410 330 Z" fill="currentColor"/>
+  <!-- Руки -->
+  <path d="M 470 220 Q 510 240 540 220 L 545 210 Q 510 220 485 205 Z" fill="currentColor"/>
+
+  <!-- Брызги грязи сзади -->
+  <g fill="currentColor" opacity="0.6">
+    <circle cx="110" cy="500" r="6"/>
+    <circle cx="80"  cy="520" r="4"/>
+    <circle cx="140" cy="535" r="3"/>
+    <circle cx="60"  cy="490" r="3"/>
+    <circle cx="95"  cy="470" r="5"/>
+    <circle cx="30"  cy="515" r="2"/>
+  </g>
+</svg>
