@@ -38,7 +38,7 @@ export const CLASSES: RaceClass[] = [
   },
   {
     id: 'master',
-    name: 'Мастер 45+',
+    name: 'Мастер 45±',
     description: 'Ветераны',
     color: 'from-slate-300 to-slate-500',
     icon: '🛠',
@@ -69,10 +69,17 @@ export function classByName(name: string): RaceClass | undefined {
 }
 
 export const SCHEDULE = [
-  { time: '07:00', event: 'Открытие паддока' },
-  { time: '08:00', event: 'Регистрация / техкомиссия' },
-  { time: '09:30', event: 'Тренировка · Дети, Леди' },
-  { time: '10:30', event: 'Тренировка · Мастер, Любители, Открытый' },
-  { time: '12:00', event: 'Официальный старт · Заезды' },
+  { time: '08:00', event: 'Открытие паддока · техкомиссия' },
+  { time: '09:00', event: 'Регистрация участников' },
+  { time: '09:30', event: 'Брифинг' },
+  { time: '10:00', event: 'НАЧАЛО · Тренировки + заезды' },
   { time: '16:30', event: 'Награждение' },
+];
+
+export interface Partner { id: string; name: string; url?: string; }
+export const PARTNERS: Partner[] = [
+  { id: 'voskhozhdenie', name: 'Восхождение' },
+  { id: 'bse',           name: 'BSE' },
+  { id: 'dr21',          name: 'DR21 · Dirt Riders' },
+  { id: 'mvc',           name: 'МВЦ Мариуполь' },
 ];

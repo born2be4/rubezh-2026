@@ -3,7 +3,7 @@ import Base from '@/layouts/Base.astro';
 import Hero from '@/components/Hero.astro';
 import Marquee from '@/components/Marquee.astro';
 import ClassBadge from '@/components/ClassBadge.astro';
-import { RACE, CLASSES, SCHEDULE, classByName } from '@/data/race';
+import { RACE, CLASSES, SCHEDULE, PARTNERS, classByName } from '@/data/race';
 import participantsData from '@/data/participants.json';
 
 const participants = participantsData.participants as Array<{ name: string; class: string; number?: string | null }>;
@@ -90,6 +90,26 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           </li>
         ))}
       </ul>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="max-w-6xl mx-auto px-4 pb-20">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">При поддержке</div>
+        <h2 class="font-display text-3xl md:text-4xl text-white mt-2">Партнёры гонки</h2>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {PARTNERS.map(p => (
+        <div class="class-card flex items-center justify-center h-28 text-center">
+          <div>
+            <div class="font-racing uppercase tracking-widest text-white text-sm">{p.name}</div>
+            <div class="mt-1 h-0.5 w-10 bg-racing-red mx-auto"></div>
+          </div>
+        </div>
+      ))}
     </div>
   </section>
 
