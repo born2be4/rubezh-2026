@@ -1,0 +1,85 @@
+---
+import '@/styles/global.css';
+import { RACE } from '@/data/race';
+
+interface Props {
+  title?: string;
+  description?: string;
+  current?: 'home' | 'participants' | 'stats';
+}
+
+const { title, description, current = 'home' } = Astro.props;
+const fullTitle = title ? `${title} · ${RACE.title} ${RACE.version}` : `${RACE.title} ${RACE.version} · ${RACE.city} · ${RACE.dateShort}`;
+const desc = description ?? `Мотокросс «${RACE.title} ${RACE.version}». ${RACE.city}, ${RACE.date}. Регистрация и статистика.`;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content={desc} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={desc} />
+<meta property="og:type" content="website" />
+<meta name="theme-color" content="#e10600" />
+<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+<title>{fullTitle}</title>
+</head>
+<body class="min-h-screen bg-asphalt-900 text-asphalt-50 antialiased relative overflow-x-hidden">
+
+  <!-- Top stripe -->
+  <div class="h-1.5 stripe-warn w-full"></div>
+
+  <!-- Header -->
+  <header class="relative z-20 border-b border-asphalt-500/40 bg-asphalt-800/70 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href={base + '/'} class="flex items-center gap-3 group">
+        <!-- logo badge -->
+        <div class="relative">
+          <div class="w-10 h-10 rounded-md checker opacity-80"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="font-display text-racing-red text-lg">R</span>
+          </div>
+        </div>
+        <div class="leading-none">
+          <div class="font-racing uppercase tracking-widest text-[11px] text-asphalt-200">{RACE.subtitle}</div>
+          <div class="font-racing uppercase tracking-wider text-sm text-white">{RACE.title} <span class="text-racing-yellow">{RACE.version}</span></div>
+        </div>
+      </a>
+
+      <nav class="flex items-center gap-1 md:gap-2 font-racing uppercase tracking-widest text-[11px] md:text-xs">
+        <a href={base + '/'} class={`px-3 py-2 rounded ${current==='home'?'text-racing-yellow border border-racing-yellow':'text-asphalt-100 hover:text-white'}`}>Главная</a>
+        <a href={base + '/participants'} class={`px-3 py-2 rounded ${current==='participants'?'text-racing-yellow border border-racing-yellow':'text-asphalt-100 hover:text-white'}`}>Участники</a>
+        <a href={base + '/stats'} class={`px-3 py-2 rounded ${current==='stats'?'text-racing-yellow border border-racing-yellow':'text-asphalt-100 hover:text-white'}`}>Статистика</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="relative z-10">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-16 border-t border-asphalt-500/40 bg-asphalt-800/50 backdrop-blur">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8 text-sm">
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow mb-2">{RACE.title} {RACE.version}</div>
+        <p class="text-asphalt-200">{RACE.organizer}</p>
+        <p class="text-asphalt-300 mt-1">{RACE.city} · {RACE.date}</p>
+      </div>
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow mb-2">Регистрация</div>
+        <a href={RACE.registrationBot} target="_blank" rel="noopener" class="underline decoration-racing-red/60 hover:text-racing-red">Telegram-бот @Race_registration_bot</a>
+      </div>
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow mb-2">Контур</div>
+        <p class="text-asphalt-300 text-xs">Данные обновляются автоматически 1 раз в час.</p>
+        <p class="text-asphalt-400 text-[10px] mt-2">© 2026 · build {new Date().toISOString().slice(0,10)}</p>
+      </div>
+    </div>
+    <div class="h-1.5 stripe-warn w-full"></div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+---
+import Base from '@/layouts/Base.astro';
+import Hero from '@/components/Hero.astro';
+import Marquee from '@/components/Marquee.astro';
+import ClassBadge from '@/components/ClassBadge.astro';
+import { RACE, CLASSES, SCHEDULE, classByName } from '@/data/race';
+import participantsData from '@/data/participants.json';
+
+const participants = participantsData.participants as Array<{ name: string; class: string; number?: string | null }>;
+const total = participants.length;
+
+const counts: Record<string, number> = Object.fromEntries(CLASSES.map(c => [c.id, 0]));
+for (const p of participants) {
+  const c = classByName(p.class);
+  if (c) counts[c.id]++;
+}
+const updated = participantsData.updatedAt || new Date().toISOString();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<Base current="home">
+  <Hero />
+
+  <Marquee items={["МОТОКРОСС", "НОВЫЙ РУБЕЖ 2.0", "БЕРДЯНСК", "25.04.2026", "GAS → GO"]} />
+
+  <!-- KEY INFO -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="grid md:grid-cols-3 gap-5">
+
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Где</div>
+        <div class="font-racing uppercase text-2xl text-white mt-1">{RACE.city}</div>
+        <p class="text-sm text-asphalt-200 mt-2">Трасса уточняется. Следите за обновлениями в боте и соцсетях.</p>
+      </div>
+
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Когда</div>
+        <div class="font-racing uppercase text-2xl text-white mt-1">{RACE.date}</div>
+        <p class="text-sm text-asphalt-200 mt-2">Старт паддока с 07:00. Награждение в 16:30.</p>
+      </div>
+
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Как попасть</div>
+        <div class="font-racing uppercase text-2xl text-white mt-1">Бот</div>
+        <p class="text-sm text-asphalt-200 mt-2">Регистрация и оплата — через Telegram.</p>
+        <a href={RACE.registrationBot} target="_blank" rel="noopener" class="mt-3 inline-flex text-racing-yellow font-racing uppercase tracking-widest text-xs underline decoration-racing-yellow/40 hover:text-racing-red">@Race_registration_bot →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="max-w-6xl mx-auto px-4 pb-16">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Классы заездов</div>
+        <h2 class="font-display text-4xl md:text-5xl text-white mt-2">5 классов · 1 трасса</h2>
+      </div>
+      <a href={base + '/stats'} class="hidden md:inline-flex btn-ghost">Подробная статистика →</a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {CLASSES.map(c => <ClassBadge cls={c} count={counts[c.id]} total={total} />)}
+
+      <!-- Total stat -->
+      <div class="class-card bg-gradient-to-br from-racing-redDk to-asphalt-700 border-racing-red/40">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Всего на старте</div>
+        <div class="font-display text-7xl text-white number-glow mt-2">{total.toString().padStart(3, '0')}</div>
+        <p class="text-sm text-asphalt-200 mt-2">зарегистрированных райдеров</p>
+        <p class="text-[10px] text-asphalt-300 mt-3 font-mono">upd: {new Date(updated).toLocaleString('ru-RU')}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="max-w-6xl mx-auto px-4 pb-20">
+    <div class="flex items-end justify-between mb-6">
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Расписание дня</div>
+        <h2 class="font-display text-4xl md:text-5xl text-white mt-2">Грид дня</h2>
+      </div>
+    </div>
+
+    <div class="relative border border-asphalt-500/40 rounded-lg overflow-hidden">
+      <div class="absolute inset-y-0 left-0 w-2 stripe-warn"></div>
+      <ul class="divide-y divide-asphalt-500/30">
+        {SCHEDULE.map((s) => (
+          <li class="flex items-center gap-6 px-6 py-4 bg-asphalt-800/60 hover:bg-asphalt-700/60 transition">
+            <div class="plate px-3 py-1.5 text-sm min-w-[72px] text-center">{s.time}</div>
+            <div class="font-racing uppercase tracking-wider text-asphalt-100">{s.event}</div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-6xl mx-auto px-4 pb-24">
+    <div class="relative rounded-xl overflow-hidden border-2 border-racing-red/50 p-10 md:p-16 text-center dust bg-gradient-to-br from-asphalt-800 via-asphalt-700 to-asphalt-800">
+      <div class="absolute inset-0 bg-grid [background-size:32px_32px] opacity-30"></div>
+      <div class="relative">
+        <div class="font-racing uppercase tracking-[0.3em] text-racing-yellow text-xs">Готов к стартовой решётке?</div>
+        <h3 class="hero-title text-5xl md:text-7xl mt-3">В бой.</h3>
+        <p class="text-asphalt-200 mt-4 max-w-xl mx-auto">Зарегистрируйся через Telegram-бот. Заполни данные, получи подтверждение и приезжай на трассу.</p>
+        <a href={RACE.registrationBot} target="_blank" rel="noopener" class="btn-racing mt-8">🏁 Поехали</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

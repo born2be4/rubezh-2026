@@ -1,0 +1,134 @@
+---
+import Base from '@/layouts/Base.astro';
+import { CLASSES, classByName, RACE } from '@/data/race';
+import participantsData from '@/data/participants.json';
+
+interface P { name: string; class: string; number?: string | null; }
+const participants = (participantsData.participants as P[]).slice().sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+const updated = participantsData.updatedAt || new Date().toISOString();
+
+// group by class
+const groups = CLASSES.map(c => ({
+  cls: c,
+  rows: participants.filter(p => classByName(p.class)?.id === c.id),
+}));
+const unknown = participants.filter(p => !classByName(p.class));
+---
+<Base title="Участники" current="participants">
+  <section class="max-w-6xl mx-auto px-4 pt-10 pb-6">
+    <div class="flex flex-wrap items-end gap-6 justify-between">
+      <div>
+        <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Стартовый лист</div>
+        <h1 class="hero-title text-5xl md:text-7xl mt-2">Участники</h1>
+        <p class="text-asphalt-200 mt-2">Всего: <span class="text-racing-yellow font-racing">{participants.length}</span> райдеров · Обновлено {new Date(updated).toLocaleString('ru-RU')}</p>
+      </div>
+      <div class="flex gap-2 flex-wrap">
+        <button data-filter="all" class="filter-btn chip border-racing-yellow text-racing-yellow">Все</button>
+        {CLASSES.map(c => (
+          <button data-filter={c.id} class="filter-btn chip border-asphalt-400 text-asphalt-200 hover:border-racing-red hover:text-racing-red">{c.name}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <input id="search" type="text" placeholder="Поиск по ФИО…" class="w-full md:w-96 bg-asphalt-800 border border-asphalt-500/50 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-racing-yellow" />
+    </div>
+  </section>
+
+  {participants.length === 0 ? (
+    <section class="max-w-6xl mx-auto px-4 pb-24">
+      <div class="class-card text-center py-16">
+        <div class="text-5xl mb-3">🏁</div>
+        <div class="font-racing uppercase text-xl text-white">Регистрация открыта</div>
+        <p class="text-asphalt-200 mt-2">Список заполнится автоматически, как только появятся первые записи.</p>
+        <a href={RACE.registrationBot} target="_blank" rel="noopener" class="btn-racing mt-6">Зарегистрироваться</a>
+      </div>
+    </section>
+  ) : (
+    <section class="max-w-6xl mx-auto px-4 pb-24 space-y-8" id="groups">
+      {groups.map(g => g.rows.length === 0 ? null : (
+        <div class="group-block" data-class={g.cls.id}>
+          <div class="flex items-center gap-3 mb-3">
+            <span class="text-2xl">{g.cls.icon}</span>
+            <h2 class="font-racing uppercase tracking-widest text-white text-lg">{g.cls.name}</h2>
+            <span class="chip border-racing-yellow text-racing-yellow">{g.rows.length}</span>
+            <span class="text-asphalt-400 text-xs">· {g.cls.description}</span>
+          </div>
+          <div class="rounded-lg overflow-hidden border border-asphalt-500/40">
+            <table class="w-full text-sm">
+              <thead class="bg-asphalt-800/80 text-asphalt-300 font-racing uppercase tracking-wider text-[11px]">
+                <tr>
+                  <th class="text-left px-4 py-2 w-20">№</th>
+                  <th class="text-left px-4 py-2">ФИО</th>
+                  <th class="text-left px-4 py-2 hidden md:table-cell">Класс</th>
+                </tr>
+              </thead>
+              <tbody>
+                {g.rows.map((p, i) => (
+                  <tr class="participant-row border-t border-asphalt-500/20 hover:bg-asphalt-700/40 transition" data-name={p.name.toLowerCase()}>
+                    <td class="px-4 py-2.5">
+                      <span class="plate px-2 py-0.5 text-xs inline-block min-w-[40px] text-center">{p.number || (i+1).toString().padStart(2,'0')}</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-white">{p.name}</td>
+                    <td class="px-4 py-2.5 text-asphalt-200 hidden md:table-cell">{g.cls.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+      {unknown.length > 0 && (
+        <div class="group-block" data-class="unknown">
+          <div class="flex items-center gap-3 mb-3">
+            <h2 class="font-racing uppercase tracking-widest text-asphalt-300 text-lg">Класс не распознан</h2>
+            <span class="chip border-asphalt-400 text-asphalt-300">{unknown.length}</span>
+          </div>
+          <ul class="rounded-lg border border-asphalt-500/40 divide-y divide-asphalt-500/30">
+            {unknown.map(p => (
+              <li class="participant-row px-4 py-2.5 flex items-center justify-between text-sm" data-name={p.name.toLowerCase()}>
+                <span>{p.name}</span><span class="text-asphalt-400 text-xs">{p.class}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  )}
+
+  <script is:inline>
+    (function(){
+      const search = document.getElementById('search');
+      const rows = document.querySelectorAll('.participant-row');
+      const blocks = document.querySelectorAll('.group-block');
+      const btns = document.querySelectorAll('.filter-btn');
+      let active = 'all';
+
+      function apply() {
+        const q = (search?.value || '').trim().toLowerCase();
+        blocks.forEach(b => {
+          const cls = b.getAttribute('data-class');
+          const visible = (active === 'all' || active === cls);
+          b.style.display = visible ? '' : 'none';
+        });
+        rows.forEach(r => {
+          const name = r.getAttribute('data-name') || '';
+          const matches = !q || name.includes(q);
+          r.style.display = matches ? '' : 'none';
+        });
+      }
+
+      search?.addEventListener('input', apply);
+      btns.forEach(btn => btn.addEventListener('click', () => {
+        active = btn.getAttribute('data-filter') || 'all';
+        btns.forEach(b => {
+          b.classList.remove('border-racing-yellow','text-racing-yellow');
+          b.classList.add('border-asphalt-400','text-asphalt-200');
+        });
+        btn.classList.remove('border-asphalt-400','text-asphalt-200');
+        btn.classList.add('border-racing-yellow','text-racing-yellow');
+        apply();
+      }));
+    })();
+  </script>
+</Base>

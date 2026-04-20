@@ -1,0 +1,14 @@
+---
+interface Props { items: string[]; speed?: number; }
+const { items, speed = 30 } = Astro.props;
+const line = [...items, ...items, ...items, ...items];
+---
+<div class="relative overflow-hidden border-y-2 border-asphalt-500/50 bg-asphalt-800 py-4">
+  <div class="marquee-track animate-scroll-x" style={`animation-duration:${speed}s`}>
+    {line.map((t) => (
+      <span class="mx-6 font-display text-2xl md:text-3xl uppercase text-racing-yellow/90 whitespace-nowrap">
+        {t} <span class="text-racing-red">/</span>
+      </span>
+    ))}
+  </div>
+</div>
