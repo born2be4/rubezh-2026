@@ -15,14 +15,14 @@ const groups = CLASSES.map(c => ({
 const unknown = participants.filter(p => !classByName(p.class));
 ---
 <Base title="Участники" current="participants">
-  <section class="max-w-6xl mx-auto px-4 pt-10 pb-6">
-    <div class="flex flex-wrap items-end gap-6 justify-between">
-      <div>
+  <section class="max-w-6xl mx-auto px-4 pt-8 sm:pt-10 pb-6">
+    <div class="flex flex-wrap items-end gap-4 sm:gap-6 justify-between">
+      <div class="min-w-0">
         <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Стартовый лист</div>
-        <h1 class="hero-title text-5xl md:text-7xl mt-2">Участники</h1>
-        <p class="text-asphalt-200 mt-2">Всего: <span class="text-racing-yellow font-racing">{participants.length}</span> райдеров · Обновлено {new Date(updated).toLocaleString('ru-RU')}</p>
+        <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl mt-2">Участники</h1>
+        <p class="text-asphalt-200 mt-2 text-sm sm:text-base">Всего: <span class="text-racing-yellow font-racing">{participants.length}</span> райдеров<br class="sm:hidden"/><span class="hidden sm:inline"> · </span>Обновлено {new Date(updated).toLocaleString('ru-RU')}</p>
       </div>
-      <div class="flex gap-2 flex-wrap">
+      <div class="flex gap-1.5 sm:gap-2 flex-wrap">
         <button data-filter="all" class="filter-btn chip border-racing-yellow text-racing-yellow">Все</button>
         {CLASSES.map(c => (
           <button data-filter={c.id} class="filter-btn chip border-asphalt-400 text-asphalt-200 hover:border-racing-red hover:text-racing-red">{c.name}</button>
@@ -30,8 +30,8 @@ const unknown = participants.filter(p => !classByName(p.class));
       </div>
     </div>
 
-    <div class="mt-6">
-      <input id="search" type="text" placeholder="Поиск по ФИО…" class="w-full md:w-96 bg-asphalt-800 border border-asphalt-500/50 rounded-md px-4 py-2.5 text-sm focus:outline-none focus:border-racing-yellow" />
+    <div class="mt-5 sm:mt-6">
+      <input id="search" type="text" placeholder="Поиск по ФИО…" class="w-full md:w-96 bg-asphalt-800 border border-asphalt-500/50 rounded-md px-4 py-2.5 text-base sm:text-sm focus:outline-none focus:border-racing-yellow" />
     </div>
   </section>
 
@@ -55,21 +55,21 @@ const unknown = participants.filter(p => !classByName(p.class));
             <span class="text-asphalt-400 text-xs">· {g.cls.description}</span>
           </div>
           <div class="rounded-lg overflow-hidden border border-asphalt-500/40">
-            <table class="w-full text-sm">
+            <table class="w-full text-sm table-fixed sm:table-auto">
               <thead class="bg-asphalt-800/80 text-asphalt-300 font-racing uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th class="text-left px-4 py-2 w-20">№</th>
-                  <th class="text-left px-4 py-2">ФИО</th>
+                  <th class="text-left px-2.5 sm:px-4 py-2 w-14 sm:w-20">№</th>
+                  <th class="text-left px-2.5 sm:px-4 py-2">ФИО</th>
                   <th class="text-left px-4 py-2 hidden md:table-cell">Класс</th>
                 </tr>
               </thead>
               <tbody>
                 {g.rows.map((p, i) => (
                   <tr class="participant-row border-t border-asphalt-500/20 hover:bg-asphalt-700/40 transition" data-name={p.name.toLowerCase()}>
-                    <td class="px-4 py-2.5">
-                      <span class="plate px-2 py-0.5 text-xs inline-block min-w-[40px] text-center">{p.number || (i+1).toString().padStart(2,'0')}</span>
+                    <td class="px-2.5 sm:px-4 py-2.5">
+                      <span class="plate px-1.5 sm:px-2 py-0.5 text-[11px] sm:text-xs inline-block min-w-[36px] sm:min-w-[40px] text-center">{p.number || (i+1).toString().padStart(2,'0')}</span>
                     </td>
-                    <td class="px-4 py-2.5 text-white">{p.name}</td>
+                    <td class="px-2.5 sm:px-4 py-2.5 text-white break-words">{p.name}</td>
                     <td class="px-4 py-2.5 text-asphalt-200 hidden md:table-cell">{g.cls.name}</td>
                   </tr>
                 ))}

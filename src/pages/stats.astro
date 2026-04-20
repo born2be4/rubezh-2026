@@ -25,28 +25,28 @@ const days = Object.entries(byDay).sort(([a],[b]) => a.localeCompare(b));
 const dayMax = Math.max(1, ...days.map(([,v]) => v));
 ---
 <Base title="Статистика" current="stats">
-  <section class="max-w-6xl mx-auto px-4 pt-10 pb-6">
+  <section class="max-w-6xl mx-auto px-4 pt-8 sm:pt-10 pb-5 sm:pb-6">
     <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Телеметрия</div>
-    <h1 class="hero-title text-5xl md:text-7xl mt-2">Статистика</h1>
-    <p class="text-asphalt-200 mt-2">Обновлено {new Date(updated).toLocaleString('ru-RU')}</p>
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl mt-2">Статистика</h1>
+    <p class="text-asphalt-200 mt-2 text-sm sm:text-base">Обновлено {new Date(updated).toLocaleString('ru-RU')}</p>
   </section>
 
   <!-- Big numbers -->
-  <section class="max-w-6xl mx-auto px-4 pb-10">
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <section class="max-w-6xl mx-auto px-4 pb-8 sm:pb-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       <div class="class-card">
         <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Всего</div>
-        <div class="font-display text-5xl text-white number-glow mt-2">{total.toString().padStart(3,'0')}</div>
+        <div class="font-display text-4xl sm:text-5xl text-white number-glow mt-2">{total.toString().padStart(3,'0')}</div>
         <div class="text-xs text-asphalt-300 mt-1">райдеров</div>
       </div>
       <div class="class-card">
         <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Классов</div>
-        <div class="font-display text-5xl text-white mt-2">{CLASSES.length}</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{CLASSES.length}</div>
         <div class="text-xs text-asphalt-300 mt-1">активных</div>
       </div>
       <div class="class-card">
         <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Средний</div>
-        <div class="font-display text-5xl text-white mt-2">{Math.round(total / CLASSES.length)}</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{Math.round(total / CLASSES.length)}</div>
         <div class="text-xs text-asphalt-300 mt-1">на класс</div>
       </div>
       <div class="class-card">
@@ -55,7 +55,7 @@ const dayMax = Math.max(1, ...days.map(([,v]) => v));
           const top = [...counts].sort((a,b)=>b.count-a.count)[0];
           return (
             <>
-              <div class="font-display text-3xl text-white mt-2">{top?.cls.name || '—'}</div>
+              <div class="font-display text-2xl sm:text-3xl text-white mt-2 break-words">{top?.cls.name || '—'}</div>
               <div class="text-xs text-asphalt-300 mt-1">{top?.count || 0} участников</div>
             </>
           );
@@ -65,19 +65,19 @@ const dayMax = Math.max(1, ...days.map(([,v]) => v));
   </section>
 
   <!-- Bar chart -->
-  <section class="max-w-6xl mx-auto px-4 pb-12">
-    <h2 class="font-display text-3xl text-white mb-4">По классам</h2>
-    <div class="class-card !p-6">
+  <section class="max-w-6xl mx-auto px-4 pb-10 sm:pb-12">
+    <h2 class="font-display text-2xl sm:text-3xl text-white mb-4">По классам</h2>
+    <div class="class-card !p-4 sm:!p-6">
       <div class="space-y-4">
         {counts.map(({cls, count}) => (
           <div>
-            <div class="flex items-baseline justify-between mb-1">
-              <div class="flex items-center gap-2">
-                <span>{cls.icon}</span>
-                <span class="font-racing uppercase tracking-wider text-sm text-white">{cls.name}</span>
-                <span class="text-xs text-asphalt-400">· {cls.description}</span>
+            <div class="flex items-baseline justify-between mb-1 gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="shrink-0">{cls.icon}</span>
+                <span class="font-racing uppercase tracking-wider text-xs sm:text-sm text-white truncate">{cls.name}</span>
+                <span class="hidden sm:inline text-xs text-asphalt-400 truncate">· {cls.description}</span>
               </div>
-              <div class="font-racing text-racing-yellow">{count}</div>
+              <div class="font-racing text-racing-yellow shrink-0">{count}</div>
             </div>
             <div class="h-6 w-full bg-asphalt-700 rounded border border-asphalt-500/40 overflow-hidden">
               <div class={`h-full bg-gradient-to-r ${cls.color} flex items-center px-2 text-[10px] font-mono text-black/80`}
@@ -92,17 +92,19 @@ const dayMax = Math.max(1, ...days.map(([,v]) => v));
   </section>
 
   {days.length > 1 && (
-    <section class="max-w-6xl mx-auto px-4 pb-20">
-      <h2 class="font-display text-3xl text-white mb-4">Регистрации по дням</h2>
-      <div class="class-card !p-6">
-        <div class="flex items-end gap-2 h-48">
-          {days.map(([d, n]) => (
-            <div class="flex-1 flex flex-col items-center gap-2">
-              <div class="text-[10px] font-mono text-asphalt-300">{n}</div>
-              <div class="w-full bg-gradient-to-t from-racing-red to-racing-yellow rounded-t" style={`height:${(n/dayMax)*100}%; min-height:4px;`}></div>
-              <div class="text-[9px] font-mono text-asphalt-400 rotate-45 origin-top-left mt-2 whitespace-nowrap">{d.slice(5)}</div>
-            </div>
-          ))}
+    <section class="max-w-6xl mx-auto px-4 pb-14 sm:pb-20">
+      <h2 class="font-display text-2xl sm:text-3xl text-white mb-4">Регистрации по дням</h2>
+      <div class="class-card !p-4 sm:!p-6">
+        <div class="overflow-x-auto -mx-2 px-2">
+          <div class="flex items-end gap-1.5 sm:gap-2 h-48" style={`min-width:${Math.max(days.length * 32, 280)}px`}>
+            {days.map(([d, n]) => (
+              <div class="flex-1 flex flex-col items-center gap-2 min-w-[24px]">
+                <div class="text-[10px] font-mono text-asphalt-300">{n}</div>
+                <div class="w-full bg-gradient-to-t from-racing-red to-racing-yellow rounded-t" style={`height:${(n/dayMax)*100}%; min-height:4px;`}></div>
+                <div class="text-[9px] font-mono text-asphalt-400 whitespace-nowrap mt-1">{d.slice(5)}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

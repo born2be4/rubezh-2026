@@ -36,11 +36,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   <!-- dust -->
   <div class="absolute inset-0 dust"></div>
 
-  <div class="relative max-w-6xl mx-auto px-4 pt-16 md:pt-24 pb-28 md:pb-36 grid md:grid-cols-[1fr_auto] gap-10 items-end">
+  <div class="relative max-w-6xl mx-auto px-4 pt-10 sm:pt-16 md:pt-24 pb-20 sm:pb-28 md:pb-36 grid md:grid-cols-[1fr_auto] gap-10 items-end">
 
    <div>
     <!-- stage marker -->
-    <div class="flex items-center gap-3 mb-6 flex-wrap">
+    <div class="flex items-center gap-2 sm:gap-3 mb-5 sm:mb-6 flex-wrap">
       <span class="chip border-racing-red text-racing-red">● {RACE.edition}</span>
       <span class="chip border-racing-yellow text-racing-yellow">{RACE.city}</span>
       <span class="chip border-asphalt-300 text-asphalt-200">{RACE.dateShort}</span>
@@ -48,20 +48,20 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
 
     <!-- Title -->
-    <h1 class="hero-title text-[17vw] md:text-[11rem] leading-[0.85] uppercase">
+    <h1 class="hero-title text-[15vw] md:text-[11rem] leading-[0.85] uppercase break-words">
       {RACE.title}
     </h1>
 
-    <div class="flex items-end gap-6 mt-2">
-      <div class="font-display text-racing-yellow text-[14vw] md:text-[9rem] leading-none">{RACE.version}</div>
-      <div class="pb-3 md:pb-6">
-        <div class="font-racing uppercase tracking-[0.3em] text-white text-sm md:text-lg">{RACE.subtitle}</div>
+    <div class="flex flex-col sm:flex-row sm:items-end gap-3 sm:gap-6 mt-2">
+      <div class="font-display text-racing-yellow text-[12vw] md:text-[9rem] leading-none">{RACE.version}</div>
+      <div class="sm:pb-3 md:pb-6">
+        <div class="font-racing uppercase tracking-[0.25em] sm:tracking-[0.3em] text-white text-sm md:text-lg">{RACE.subtitle}</div>
         <div class="font-racing uppercase tracking-widest text-asphalt-200 text-xs md:text-sm mt-1">{RACE.date} · {RACE.city}</div>
       </div>
     </div>
 
     <!-- CTAs -->
-    <div class="mt-10 flex flex-wrap gap-4">
+    <div class="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
       <a href={RACE.registrationBot} target="_blank" rel="noopener" class="btn-racing">
         🏁 Зарегистрироваться
       </a>
