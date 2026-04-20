@@ -28,6 +28,7 @@ jobs:
         run: pip install -r scripts/requirements.txt
 
       - name: Sync from Google Sheet
+        continue-on-error: true
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON:  ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
