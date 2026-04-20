@@ -21,8 +21,8 @@ from google.oauth2.service_account import Credentials
 ROOT = Path(__file__).resolve().parents[1]
 OUT  = ROOT / "src" / "data" / "participants.json"
 
-SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "1KcB8loBBpQaionRSkIJrcsLIsMiYHIUpFDm9jKWIMOw")
-WORKSHEET_NAME = os.environ.get("WORKSHEET_NAME", "Лист1")
+SPREADSHEET_ID = os.environ.get("SPREADSHEET_ID", "14q5nidaUeAUsxoxfDn_L1wJrJFRe-i2eB3eEQApthv8")
+WORKSHEET_NAME = os.environ.get("WORKSHEET_NAME", "Новый Рубеж 2.0 — Бердянск")
 # Публично — только подтверждённые записи.
 ALLOWED_STATUSES = {"подтверждено"}
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
