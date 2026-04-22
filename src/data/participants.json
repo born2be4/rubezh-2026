@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-22T16:50:46Z",
+  "updatedAt": "2026-04-22T17:53:34Z",
   "source": "gsheet:14q5nida…/Новый Рубеж 2.0 — Бердянск",
-  "total": 41,
-  "pending": 1,
+  "total": 43,
+  "pending": 2,
   "participants": [
     {
       "name": "Малакуцкий Александр Александрович",
@@ -290,6 +290,20 @@
       "number": null,
       "status": "подтверждено",
       "registeredAt": "2026-04-22 10:47:39"
+    },
+    {
+      "name": "Канина София Андреевна",
+      "class": "Леди",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": "2026-04-22 16:22:47"
+    },
+    {
+      "name": "Тодорев Савелий Сергеевич",
+      "class": "Дети",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": "2026-04-22 17:16:36"
     }
   ]
 }
