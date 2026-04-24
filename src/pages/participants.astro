@@ -4,13 +4,24 @@ import { CLASSES, classByName, RACE } from '@/data/race';
 import participantsData from '@/data/participants.json';
 
 interface P { name: string; class: string; number?: string | null; }
-const participants = (participantsData.participants as P[]).slice().sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+const participants = (participantsData.participants as P[]).slice();
 const updated = participantsData.updatedAt || new Date().toISOString();
+
+// В каждом классе сортируем по стартовому номеру (ID из Google Sheet)
+// по возрастанию; если номер пуст / не число — такие в конец, дальше по ФИО.
+const byStartNumber = (a: P, b: P) => {
+  const na = Number(a.number);
+  const nb = Number(b.number);
+  const va = Number.isFinite(na) ? na : Number.POSITIVE_INFINITY;
+  const vb = Number.isFinite(nb) ? nb : Number.POSITIVE_INFINITY;
+  if (va !== vb) return va - vb;
+  return a.name.localeCompare(b.name, 'ru');
+};
 
 // group by class
 const groups = CLASSES.map(c => ({
   cls: c,
-  rows: participants.filter(p => classByName(p.class)?.id === c.id),
+  rows: participants.filter(p => classByName(p.class)?.id === c.id).sort(byStartNumber),
 }));
 const unknown = participants.filter(p => !classByName(p.class));
 ---
