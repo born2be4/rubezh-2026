@@ -58,7 +58,7 @@ const unknown = participants.filter(p => !classByName(p.class));
             <table class="w-full text-sm table-fixed sm:table-auto">
               <thead class="bg-asphalt-800/80 text-asphalt-300 font-racing uppercase tracking-wider text-[11px]">
                 <tr>
-                  <th class="text-left px-2.5 sm:px-4 py-2 w-14 sm:w-20">№</th>
+                  <th class="text-left px-2.5 sm:px-4 py-2 w-28 sm:w-44">Стартовый номер участника</th>
                   <th class="text-left px-2.5 sm:px-4 py-2">ФИО</th>
                   <th class="text-left px-4 py-2 hidden md:table-cell">Класс</th>
                 </tr>
@@ -67,7 +67,7 @@ const unknown = participants.filter(p => !classByName(p.class));
                 {g.rows.map((p, i) => (
                   <tr class="participant-row border-t border-asphalt-500/20 hover:bg-asphalt-700/40 transition" data-name={p.name.toLowerCase()}>
                     <td class="px-2.5 sm:px-4 py-2.5">
-                      <span class="plate px-1.5 sm:px-2 py-0.5 text-[11px] sm:text-xs inline-block min-w-[36px] sm:min-w-[40px] text-center">{p.number || (i+1).toString().padStart(2,'0')}</span>
+                      <span class="plate px-1.5 sm:px-2 py-0.5 text-[11px] sm:text-xs inline-block min-w-[36px] sm:min-w-[40px] text-center">{p.number ?? '—'}</span>
                     </td>
                     <td class="px-2.5 sm:px-4 py-2.5 text-white break-words">{p.name}</td>
                     <td class="px-4 py-2.5 text-asphalt-200 hidden md:table-cell">{g.cls.name}</td>

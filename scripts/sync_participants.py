@@ -30,7 +30,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 # синонимы колонок (любые из этих имён подойдут)
 NAME_KEYS   = {"фио", "имя", "name", "full name", "full_name", "участник"}
 CLASS_KEYS  = {"класс", "class", "категория", "зачёт", "зачет"}
-NUMBER_KEYS = {"номер", "#", "number", "num", "start", "старт"}
+NUMBER_KEYS = {"id", "ид", "номер", "#", "number", "num", "start", "старт", "стартовый номер", "стартовый номер участника"}
 DATE_KEYS   = {"дата", "date", "registeredat", "registered_at", "timestamp", "время"}
 
 def _decode_private_key(raw: str) -> str:
