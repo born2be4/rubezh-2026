@@ -1,8 +1,8 @@
 {
-  "updatedAt": "2026-04-24T16:45:14Z",
+  "updatedAt": "2026-04-24T17:42:44Z",
   "source": "gsheet:14q5nida…/Новый Рубеж 2.0 — Бердянск",
-  "total": 43,
-  "pending": 2,
+  "total": 49,
+  "pending": 0,
   "participants": [
     {
       "name": "Малакуцкий Александр Александрович",
@@ -201,6 +201,13 @@
       "registeredAt": "2026-04-16 15:07:50"
     },
     {
+      "name": "Лозовенко Сергей Анатольевич",
+      "class": "Мастер (45+)",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
       "name": "Колтовской Александр Игоревич",
       "class": "Любители",
       "number": null,
@@ -299,11 +306,46 @@
       "registeredAt": "2026-04-22 16:22:47"
     },
     {
+      "name": "Тодорев Арсений Сергеевич",
+      "class": "Открытый",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": "2026-04-22 17:11:30"
+    },
+    {
       "name": "Тодорев Савелий Сергеевич",
       "class": "Дети",
       "number": null,
       "status": "подтверждено",
       "registeredAt": "2026-04-22 17:16:36"
+    },
+    {
+      "name": "Олексенко Кирилл Александрович",
+      "class": "Дети",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": "2026-04-22 17:45:57"
+    },
+    {
+      "name": "Платонов Алексей Владимирович",
+      "class": "Любители",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Павлов Алексей Геннадьевич",
+      "class": "Любители",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Афанасьев Николай Анатольевич",
+      "class": "Любители",
+      "number": null,
+      "status": "подтверждено",
+      "registeredAt": null
     }
   ]
 }
