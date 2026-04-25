@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-04-25T17:31:41Z",
+  "updatedAt": "2026-04-25T18:33:24Z",
   "source": "gsheet:14q5nida…/Новый Рубеж 2.0 — Бердянск",
-  "total": 49,
+  "total": 57,
   "pending": 0,
   "participants": [
     {
@@ -341,9 +341,65 @@
       "registeredAt": null
     },
     {
+      "name": "Бдыкин Олег Анатольевич",
+      "class": "Мастер (45+)",
+      "number": "49",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Чернышев Данил Максимович",
+      "class": "Дети",
+      "number": "50",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Овчеренко Александр Александрович",
+      "class": "Открытый",
+      "number": "51",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Воробьев Андрей Юрьевич",
+      "class": "Любители",
+      "number": "52",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Коба Ионан Андреевич",
+      "class": "Открытый",
+      "number": "53",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Христов Александр Федорович",
+      "class": "Мастер (45+)",
+      "number": "54",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Момарев Дмитрий Алексеевич",
+      "class": "Любители",
+      "number": "55",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
       "name": "Афанасьев Николай Анатольевич",
       "class": "Любители",
-      "number": "49",
+      "number": "56",
+      "status": "подтверждено",
+      "registeredAt": null
+    },
+    {
+      "name": "Ереминко Ирина Владимировна",
+      "class": "Леди",
+      "number": "57",
       "status": "подтверждено",
       "registeredAt": null
     }
