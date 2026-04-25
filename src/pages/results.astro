@@ -26,16 +26,35 @@ interface ClassData {
 const classes = resultsData.classes as Record<string, ClassData>;
 const updated = resultsData.updatedAt;
 
-// Pedestal — победители каждого класса (1 место — берём из первой группы или общего топа)
-function topThree(cd: ClassData): ResultRow[] {
-  const all: ResultRow[] = [];
-  for (const g of cd.groups) all.push(...g.rows);
-  return [...all].sort((a, b) => b.total.pts - a.total.pts).slice(0, 3);
+// Pedestal — топ-3 в каждом классе (или в каждой группе, если класс разбит на подгруппы)
+interface PodiumCard {
+  cls: typeof CLASSES[number];
+  group: string | null;
+  top: ResultRow[];
 }
 
-// Порядок классов на пьедестале — как в CLASSES
-const podium = CLASSES.map(c => ({ cls: c, top: topThree(classes[c.id] ?? { groups: [] }) }))
-  .filter(p => p.top.length > 0);
+function topNFromRows(rows: ResultRow[], n = 3): ResultRow[] {
+  return [...rows]
+    .sort((a, b) => (a.total.place || 999) - (b.total.place || 999) || b.total.pts - a.total.pts)
+    .slice(0, n);
+}
+
+const podium: PodiumCard[] = [];
+for (const cls of CLASSES) {
+  const cd = classes[cls.id];
+  if (!cd) continue;
+  const groupsWithData = cd.groups.filter(g => g.rows.length > 0);
+  if (groupsWithData.length === 0) continue;
+  const hasNamedGroups = groupsWithData.some(g => g.group);
+  if (hasNamedGroups) {
+    // отдельный пьедестал на каждую подгруппу
+    for (const g of groupsWithData) {
+      podium.push({ cls, group: g.group, top: topNFromRows(g.rows) });
+    }
+  } else {
+    podium.push({ cls, group: null, top: topNFromRows(groupsWithData[0].rows) });
+  }
+}
 
 // Медаль-цвет
 const medalColors = ['from-yellow-300 to-amber-500', 'from-slate-200 to-slate-400', 'from-amber-700 to-amber-900'];
@@ -71,7 +90,7 @@ const totalGroups = Object.values(classes).reduce((s, c) => s + c.groups.length,
       </div>
       <div class="class-card">
         <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Классов</div>
-        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{podium.length}</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{Object.keys(classes).length}</div>
         <div class="text-xs text-asphalt-300 mt-1">в зачёте</div>
       </div>
       <div class="class-card">
@@ -91,15 +110,17 @@ const totalGroups = Object.values(classes).reduce((s, c) => s + c.groups.length,
   <section class="max-w-6xl mx-auto px-4 pb-10 sm:pb-12">
     <h2 class="font-display text-2xl sm:text-3xl text-white mb-4 sm:mb-6">Пьедестал</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-      {podium.map(({cls, top}) => (
+      {podium.map(({cls, group, top}) => (
         <div class="class-card !p-4 sm:!p-5">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-2 min-w-0">
               <span class="text-xl">{cls.icon}</span>
-              <div class="font-racing uppercase tracking-widest text-sm text-white truncate">{cls.name}</div>
+              <div class="font-racing uppercase tracking-widest text-sm text-white truncate">
+                {cls.name}{group ? <span class="text-racing-yellow"> · {group}</span> : null}
+              </div>
             </div>
             <div class={`text-[10px] font-racing uppercase tracking-wider px-2 py-0.5 rounded bg-gradient-to-r ${cls.color} text-black/80`}>
-              {top.length} топ
+              ТОП-{top.length}
             </div>
           </div>
           <ol class="space-y-2">
