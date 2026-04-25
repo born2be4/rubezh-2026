@@ -136,9 +136,6 @@ const totalGroups = Object.values(classes).reduce((s, c) => s + c.groups.length,
             <div class="flex items-center gap-3 mb-3">
               <span class="text-2xl">{cls.icon}</span>
               <h3 class="font-display text-xl sm:text-2xl text-white">{cls.name}</h3>
-              <div class={`text-[10px] font-racing uppercase tracking-wider px-2 py-0.5 rounded bg-gradient-to-r ${cls.color} text-black/80`}>
-                {cls.description}
-              </div>
             </div>
 
             {cd.groups.map(g => (
