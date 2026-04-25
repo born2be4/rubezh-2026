@@ -1,0 +1,206 @@
+---
+import Base from '@/layouts/Base.astro';
+import { CLASSES, classById } from '@/data/race';
+import resultsData from '@/data/results.json';
+
+interface RaceRow {
+  num: number;
+  name: string;
+  pts: number;
+  place: number;
+}
+interface ResultRow {
+  race1: RaceRow;
+  race2: RaceRow;
+  total: RaceRow;
+  city?: string | null;
+}
+interface Group {
+  group: string | null;
+  rows: ResultRow[];
+}
+interface ClassData {
+  groups: Group[];
+}
+
+const classes = resultsData.classes as Record<string, ClassData>;
+const updated = resultsData.updatedAt;
+
+// Pedestal — победители каждого класса (1 место — берём из первой группы или общего топа)
+function topThree(cd: ClassData): ResultRow[] {
+  const all: ResultRow[] = [];
+  for (const g of cd.groups) all.push(...g.rows);
+  return [...all].sort((a, b) => b.total.pts - a.total.pts).slice(0, 3);
+}
+
+// Порядок классов на пьедестале — как в CLASSES
+const podium = CLASSES.map(c => ({ cls: c, top: topThree(classes[c.id] ?? { groups: [] }) }))
+  .filter(p => p.top.length > 0);
+
+// Медаль-цвет
+const medalColors = ['from-yellow-300 to-amber-500', 'from-slate-200 to-slate-400', 'from-amber-700 to-amber-900'];
+const medalLabel = ['1', '2', '3'];
+
+// Общая статистика
+const totalRiders = Object.values(classes).reduce(
+  (s, c) => s + c.groups.reduce((ss, g) => ss + g.rows.length, 0),
+  0,
+);
+const totalGroups = Object.values(classes).reduce((s, c) => s + c.groups.length, 0);
+---
+<Base title="Итоги гонки" current="results">
+
+  <!-- HERO -->
+  <section class="max-w-6xl mx-auto px-4 pt-8 sm:pt-10 pb-5 sm:pb-6">
+    <div class="font-racing uppercase tracking-widest text-racing-yellow text-xs">Финиш · 25.04.2026</div>
+    <h1 class="hero-title text-4xl sm:text-5xl md:text-7xl mt-2">Итоги гонки</h1>
+    <p class="text-asphalt-200 mt-3 text-sm sm:text-base max-w-2xl">
+      Бердянск · «Новый Рубеж 2.0». Два заезда в каждом классе.
+      Места — по сумме очков двух заездов.
+    </p>
+    <p class="text-asphalt-400 text-xs mt-2">Опубликовано {new Date(updated).toLocaleString('ru-RU')}</p>
+  </section>
+
+  <!-- KEY NUMBERS -->
+  <section class="max-w-6xl mx-auto px-4 pb-6 sm:pb-8">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Финишировали</div>
+        <div class="font-display text-4xl sm:text-5xl text-white number-glow mt-2">{totalRiders.toString().padStart(3,'0')}</div>
+        <div class="text-xs text-asphalt-300 mt-1">райдеров</div>
+      </div>
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Классов</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{podium.length}</div>
+        <div class="text-xs text-asphalt-300 mt-1">в зачёте</div>
+      </div>
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Групп</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">{totalGroups}</div>
+        <div class="text-xs text-asphalt-300 mt-1">заезды</div>
+      </div>
+      <div class="class-card">
+        <div class="font-racing uppercase tracking-widest text-[11px] text-racing-yellow">Заездов</div>
+        <div class="font-display text-4xl sm:text-5xl text-white mt-2">2</div>
+        <div class="text-xs text-asphalt-300 mt-1">на класс</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PODIUMS -->
+  <section class="max-w-6xl mx-auto px-4 pb-10 sm:pb-12">
+    <h2 class="font-display text-2xl sm:text-3xl text-white mb-4 sm:mb-6">Пьедестал</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      {podium.map(({cls, top}) => (
+        <div class="class-card !p-4 sm:!p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xl">{cls.icon}</span>
+              <div class="font-racing uppercase tracking-widest text-sm text-white truncate">{cls.name}</div>
+            </div>
+            <div class={`text-[10px] font-racing uppercase tracking-wider px-2 py-0.5 rounded bg-gradient-to-r ${cls.color} text-black/80`}>
+              {top.length} топ
+            </div>
+          </div>
+          <ol class="space-y-2">
+            {top.map((r, idx) => (
+              <li class="flex items-center gap-3 bg-asphalt-700/50 rounded border border-asphalt-500/30 px-2.5 py-2">
+                <div class={`shrink-0 w-7 h-7 rounded-full bg-gradient-to-br ${medalColors[idx]} flex items-center justify-center font-display text-sm text-black`}>
+                  {medalLabel[idx]}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="text-sm text-white truncate">{r.total.name}</div>
+                  <div class="text-[11px] text-asphalt-400 truncate">
+                    #{r.total.num}{r.city ? ` · ${r.city}` : ''}
+                  </div>
+                </div>
+                <div class="font-racing text-racing-yellow shrink-0 text-sm">{r.total.pts}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- FULL TABLES PER CLASS -->
+  <section class="max-w-6xl mx-auto px-4 pb-14 sm:pb-20">
+    <h2 class="font-display text-2xl sm:text-3xl text-white mb-4 sm:mb-6">Полные таблицы</h2>
+
+    <div class="space-y-8 sm:space-y-10">
+      {CLASSES.map(cls => {
+        const cd = classes[cls.id];
+        if (!cd || cd.groups.every(g => g.rows.length === 0)) return null;
+        return (
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <span class="text-2xl">{cls.icon}</span>
+              <h3 class="font-display text-xl sm:text-2xl text-white">{cls.name}</h3>
+              <div class={`text-[10px] font-racing uppercase tracking-wider px-2 py-0.5 rounded bg-gradient-to-r ${cls.color} text-black/80`}>
+                {cls.description}
+              </div>
+            </div>
+
+            {cd.groups.map(g => (
+              <div class="mb-4 sm:mb-5">
+                {g.group && (
+                  <div class="font-racing uppercase tracking-widest text-xs text-racing-yellow mb-2">
+                    Группа {g.group}
+                  </div>
+                )}
+                <div class="class-card !p-0 overflow-hidden">
+                  <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                      <thead class="bg-asphalt-700/70 text-asphalt-300 uppercase tracking-wider text-[10px] font-racing">
+                        <tr>
+                          <th class="text-center px-2 py-2 w-12">Место</th>
+                          <th class="text-center px-2 py-2 w-12">№</th>
+                          <th class="text-left px-2 py-2">Гонщик</th>
+                          <th class="text-left px-2 py-2 hidden sm:table-cell">Город</th>
+                          <th class="text-center px-2 py-2 w-16 hidden md:table-cell">Заезд 1</th>
+                          <th class="text-center px-2 py-2 w-16 hidden md:table-cell">Заезд 2</th>
+                          <th class="text-center px-2 py-2 w-16">Σ очк.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {g.rows.map((r, i) => (
+                          <tr class={`border-t border-asphalt-500/30 ${i === 0 ? 'bg-racing-yellow/10' : i === 1 ? 'bg-asphalt-200/5' : i === 2 ? 'bg-amber-700/10' : ''}`}>
+                            <td class="text-center px-2 py-2">
+                              <span class={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-display ${
+                                r.total.place === 1 ? 'bg-gradient-to-br from-yellow-300 to-amber-500 text-black' :
+                                r.total.place === 2 ? 'bg-gradient-to-br from-slate-200 to-slate-400 text-black' :
+                                r.total.place === 3 ? 'bg-gradient-to-br from-amber-700 to-amber-900 text-white' :
+                                'text-asphalt-300'
+                              }`}>
+                                {r.total.place}
+                              </span>
+                            </td>
+                            <td class="text-center px-2 py-2 font-mono text-asphalt-200">{r.total.num}</td>
+                            <td class="px-2 py-2 text-white">{r.total.name}</td>
+                            <td class="px-2 py-2 text-asphalt-300 hidden sm:table-cell">{r.city ?? '—'}</td>
+                            <td class="text-center px-2 py-2 text-asphalt-200 hidden md:table-cell font-mono">
+                              <span class="text-asphalt-400 text-[10px] mr-1">{r.race1.place}.</span>{r.race1.pts}
+                            </td>
+                            <td class="text-center px-2 py-2 text-asphalt-200 hidden md:table-cell font-mono">
+                              <span class="text-asphalt-400 text-[10px] mr-1">{r.race2.place}.</span>{r.race2.pts}
+                            </td>
+                            <td class="text-center px-2 py-2 font-racing text-racing-yellow">{r.total.pts}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+
+    <p class="text-asphalt-400 text-xs mt-6">
+      Очки заезда: 1 место — 25, 2 — 24 … далее по убыванию. Итог = сумма двух заездов.
+    </p>
+  </section>
+
+</Base>
